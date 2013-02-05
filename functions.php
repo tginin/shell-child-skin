@@ -19,62 +19,72 @@ add_action( 'after_setup_theme', 'shell_child_skin_setup', 11 );
  */
 function shell_child_skin_setup() {
 
-	/* Get the theme prefix ("path"). */
+	/* Get the theme prefix ("shell"). */
 	$prefix = hybrid_get_prefix();
 
 	/* register skin option */
-	add_filter( "shell_skin", 'shell_child_skin_register' );
+	add_filter( "shell_skins", 'shell_child_skin_register' );
 
-	/* add skins style */
-	add_filter( "{$prefix}_styles", 'shell_child_skin_style' );
-
+	/* add skin css */
+	add_filter( "{$prefix}_styles", 'shell_child_skin_css' );
 }
 
 /**
- * Add this skin to skin array
+ * Register Skin.
+ * @since 0.1.0
  */
 function shell_child_skin_register( $skins ){
 
-	/* register "red" skin */
-	$skins['violet'] = array( 'name' => 'Violet (Shell Child)', 'image' => get_stylesheet_directory_uri() . '/skins/violet-ss.jpg' );
+	/* register "valentine" skin */
+	$skins['valentine'] = array(
+		'name' => 'Valentine',
+		'screenshot' => get_stylesheet_directory_uri() . '/valentine.png',
+		'description' => 'Skin For Valentine Day',
+	);
 
-	/* register "blue" skin */
-	$skins['green'] = array( 'name' => 'Green (Shell Child)', 'image' => get_stylesheet_directory_uri() . '/skins/green-ss.jpg' );
+	/* register "halloween" skin */
+	$skins['halloween'] = array(
+		'name' => 'Halloween',
+		'screenshot' => get_stylesheet_directory_uri() . '/halloween.png',
+		'description' => 'Skin For Halloween Day',
+	);
+
+	/* register "christmas" skin */
+	$skins['christmas'] = array(
+		'name' => 'Christmas',
+		'screenshot' => get_stylesheet_directory_uri() . '/christmas.png',
+		'description' => 'Skin For Christmas Day',
+	);
 
 	return $skins;
 }
 
+
 /**
- * Add Stylesheet
+ * Skins CSS
+ * @since 0.1.0
  */
-function shell_child_skin_style( $styles ){
+function shell_child_skin_css( $styles ){
 
-	/* get option */
-	$option = hybrid_get_setting( 'skin' );
+	/* get active skin */
+	$active_skin = shell_active_skin();
 
-	/* version */
-	$theme = wp_get_theme();
-	$version = $theme->get( 'Version' );
-
-	/* red skin selected */
-	if ( $option == 'violet' ){
-		/* add media queries css */
+	/* if "valentine" selected */
+	if ( $active_skin == 'valentine' ){
 		$styles['skin'] = array(
-			'src' => get_stylesheet_directory_uri() . '/skins/violet.css',
-			'media' => 'all',
-			'deps' => 'style',
-			'version' => 'violet' . $version,
+			'src' => get_stylesheet_directory_uri() . '/valentine.css',
 		);
 	}
-
-	/* blue skin selected */
-	elseif ( $option == 'green' ){
-		/* add media queries css */
+	/* if "halloween" selected */
+	if ( $active_skin == 'halloween' ){
 		$styles['skin'] = array(
-			'src' => get_stylesheet_directory_uri() . '/skins/green.css',
-			'media' => 'all',
-			'deps' => 'style',
-			'version' => 'green' . $version,
+			'src' => get_stylesheet_directory_uri() . '/halloween.css',
+		);
+	}
+	/* if "christmas" selected */
+	if ( $active_skin == 'christmas' ){
+		$styles['skin'] = array(
+			'src' => get_stylesheet_directory_uri() . '/christmas.css',
 		);
 	}
 
